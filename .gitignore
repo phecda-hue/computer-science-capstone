@@ -20,5 +20,4 @@ __pycache__/
 *.log
 
 /.venv311/
-/data/
 /models/
