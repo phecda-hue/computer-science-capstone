@@ -2,18 +2,17 @@ from dataclasses import dataclass
 
 # 클래스별 가중치 W (질량 대체)
 CLASS_WEIGHTS: dict[int, float] = {
-    0:  0.8,   # stairs_up
-    1:  1.0,   # stairs_down   ← 내려가는 계단이 더 위험
-    2:  0.6,   # curb
-    3:  0.5,   # manhole
-    4:  0.5,   # step
-    5:  0.5,   # pedestrian
-    6:  0.7,   # bicycle
-    7:  1.0,   # vehicle
-    8:  0.4,   # pole
-    9:  0.6,   # construction
-    10: 0.4,   # protrusion
-    11: 0.9,   # hole          ← 낙상 위험 높음
+    0:  0.8,   # stairs
+    1:  0.6,   # curb
+    2:  0.5,   # manhole
+#    3:  0.5,   # step
+    3:  0.5,   # person
+#    5:  0.7,   # bicycle
+#    6:  1.0,   # vehicle
+#    7:  0.4,   # pole
+#    8:  0.6,   # construction
+#    9: 0.4,   # protrusion
+    4: 0.9,   # hole          ← 낙상 위험 높음
 }
 
 # 위험도 임계값
@@ -38,9 +37,10 @@ class RiskResult:
 
 
 CLASS_NAMES = [
-    "stairs_up", "stairs_down", "curb", "manhole", "step",
-    "pedestrian", "bicycle", "vehicle", "pole",
-    "construction", "protrusion", "hole"
+    "stairs", "curb", "manhole", # "step",
+    "person", # "bicycle", "vehicle", "pole",
+    # "construction", "protrusion", 
+    "hole"
 ]
 
 
