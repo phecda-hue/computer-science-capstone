@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+import numpy as np
 
 # 클래스별 가중치 W (질량 대체)
 CLASS_WEIGHTS: dict[int, float] = {
