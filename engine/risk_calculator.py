@@ -71,7 +71,7 @@ def calc_risk(track_id: int,
             depth_m = 1.0 / (bbox_area * BBOX_AREA_SCALE + 1e-6)
             depth_m = float(np.clip(depth_m, DEPTH_MIN_M, DEPTH_MAX_M))
         else:
-            # 추정 불가 → 위험도 0
+            # 추정 불가 → 위험도 0hi
             return RiskResult(track_id, class_id, name,
                               -1.0, 0.0, W, 0.0, "SAFE")
 
