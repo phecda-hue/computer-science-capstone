@@ -15,13 +15,7 @@ Risk = W × (1/d² + v_approach/d)
 | 0        | stairs      | 0.8 |
 | 1        | curb        | 0.6 |
 | 2        | manhole     | 0.5 |
-# | 3        | step        | 0.5 |
-| 3        | person  | 0.5 |
-# | 5        | bicycle     | 0.7 |
-# | 6        | vehicle     | 1.0 |
-# | 7        | pole        | 0.4 |
-# | 8        | construction| 0.6 |
-# | 9        | protrusion  | 0.4 |
+| 3        | person      | 0.5 |
 | 4        | hole        | 0.9 |
 
 ## 위험 등급

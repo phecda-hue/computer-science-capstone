@@ -2,11 +2,5 @@ classes:
   0: stairs         # 계단
   1: curb           # 연석·보도 턱
   2: manhole        # 맨홀 뚜껑
-#  3: step           # 단일 단차 (계단 아님)
   3: person         # 사람
-#  5: bicycle        # 자전거·킥보드
-#  6: vehicle        # 차량
-#  7: pole           # 기둥·가로등·표지판
-#  8: construction   # 공사 구역·안전 펜스
-#  9: protrusion     # 돌출물 (볼라드, 가드레일 끝 등)
   4: hole          # 구멍·파인 곳
