@@ -21,3 +21,5 @@ __pycache__/
 
 /.venv311/
 /models/
+/.venv/
+/data/
