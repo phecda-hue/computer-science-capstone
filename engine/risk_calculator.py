@@ -8,6 +8,7 @@ CLASS_WEIGHTS: dict[int, float] = {
     2:  0.5,   # manhole
     3:  0.5,   # person
     4:  0.9,   # hole          ← 낙상 위험 높음
+    5:  0.7,   # vehicle
 }
 
 # 위험도 임계값

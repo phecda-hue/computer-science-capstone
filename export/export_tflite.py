@@ -1,4 +1,5 @@
 from ultralytics import YOLO
+from numpy.core import umath
 
 model = YOLO("models/best.pt")
 
