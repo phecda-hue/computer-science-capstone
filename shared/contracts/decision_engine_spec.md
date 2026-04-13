@@ -17,6 +17,7 @@ Risk = W × (1/d² + v_approach/d)
 | 2        | manhole     | 0.5 |
 | 3        | person      | 0.5 |
 | 4        | hole        | 0.9 |
+| 5        | vehicle     | 0.7 |
 
 ## 위험 등급
 | 등급   | risk_score  | 알림               |

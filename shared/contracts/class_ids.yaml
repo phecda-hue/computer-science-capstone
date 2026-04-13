@@ -4,3 +4,4 @@ classes:
   2: manhole        # 맨홀 뚜껑
   3: person         # 사람
   4: hole          # 구멍·파인 곳
+  5: vehicle        # 자전거, 킥보드 등

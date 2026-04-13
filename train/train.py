@@ -11,22 +11,36 @@ import multiprocessing as mp
 # ────────────────────────────────────────────────
 # 설정값 (필요 시 여기만 수정)
 # ────────────────────────────────────────────────
-EPOCHS     = 200
-IMG_SIZE   = 640
-BATCH_SIZE = 64
-SIZES      = ["n", "s", "m", "l", "x"]   # YOLO26 전체 사이즈
+if torch.cuda.is_available():
+    EPOCHS     = 200
+    IMG_SIZE   = 640
+    BATCH_SIZE = 64
+    SIZES      = ["n", "s", "m", "l", "x"]   # YOLO26 전체 사이즈
+else:
+    EPOCHS     = 5
+    IMG_SIZE   = 640
+    BATCH_SIZE = 4
+    SIZES      = ["n"]   # CPU 사용 시 작은 모델만 학습
 
-ROOT        = Path(r"C:\Users\USER\Desktop\1")
-DATA_YAML   = ROOT / "data.yaml"
-PROJECT_DIR = ROOT / "runs" / "detect"
+# 본인 캡스톤 프로젝트 경로에 맞추기
+ROOT        = Path(r"C:\Users\booge\OneDrive\바탕 화면\과제\4학년 1학기\컴공 캡스톤")
+
+# __file__ = 현재 train.py의 절대 경로
+# .parent   = train/  폴더
+# .parent   = 컴공 캡스톤/  폴더
+BASE_DIR    = Path(__file__).resolve().parent.parent
+
+DATA_YAML   = BASE_DIR / "data" / "data.yaml"
+PROJECT_DIR = BASE_DIR / "runs" / "detect"
 
 # 로컬 모델 경로 (ROOT 폴더에 직접 넣은 .pt 파일)
+# 반드시 models 폴더에 모델을 넣을 것
 MODEL_PATHS = {
-    "n": ROOT / "yolo26n.pt",
-    "s": ROOT / "yolo26s.pt",
-    "m": ROOT / "yolo26m.pt",
-    "l": ROOT / "yolo26l.pt",
-    "x": ROOT / "yolo26x.pt",
+    "n": ROOT / "models" / "yolo26n.pt",
+    "s": ROOT / "models" / "yolo26s.pt",
+    "m": ROOT / "models" / "yolo26m.pt",
+    "l": ROOT / "models" / "yolo26l.pt",
+    "x": ROOT / "models" / "yolo26x.pt",
 }
 
 # 사이즈별 배치 크기 (VRAM 부족 시 개별 조정)
@@ -152,11 +166,14 @@ def train_model(size: str, device: int):
         print(f"{'─'*40}\n")
 
     except RuntimeError as e:
-        if "out of memory" in str(e).lower():
-            print(f"\n❌ CUDA OOM 발생! → YOLO26{size.upper()} batch={batch}")
-            print(f"   BATCH_BY_SIZE[\"{size}\"] 값을 절반으로 줄인 후 재시도하세요\n")
-        else:
+        if not torch.cuda.is_available():
             print(f"\n❌ 학습 중 에러 발생 (YOLO26{size.upper()}): {e}\n")
+        else:
+            if "out of memory" in str(e).lower():
+                print(f"\n❌ CUDA OOM 발생! → YOLO26{size.upper()} batch={batch}")
+                print(f"   BATCH_BY_SIZE[\"{size}\"] 값을 절반으로 줄인 후 재시도하세요\n")
+            else:
+                print(f"\n❌ 학습 중 에러 발생 (YOLO26{size.upper()}): {e}\n")
         # 에러 발생해도 다음 사이즈로 계속 진행
         return
 
@@ -169,12 +186,15 @@ def main():
         raise FileNotFoundError(f"data.yaml 파일이 없습니다: {DATA_YAML}")
 
     if not torch.cuda.is_available():
-        raise RuntimeError("CUDA를 사용할 수 없습니다. GPU 환경을 확인해주세요.")
+        DEVICE = "cpu"
+    else: DEVICE = 0
+       # raise RuntimeError("CUDA를 사용할 수 없습니다. GPU 환경을 확인해주세요.")
 
     # 모델 파일 존재 여부 확인
     check_model_files()
 
-    DEVICE = 0
+    
+    # DEVICE = 0
     PROJECT_DIR.mkdir(parents=True, exist_ok=True)
 
     # ── 환경 정보 출력 ─────────────────────────
@@ -182,8 +202,11 @@ def main():
     print("SmartView YOLO26 전체 사이즈 학습")
     print("="*60)
     print(f"PyTorch 버전  : {torch.__version__}")
-    print(f"GPU           : {torch.cuda.get_device_name(0)}")
-    print(f"GPU 메모리    : {torch.cuda.get_device_properties(0).total_memory / 1024**3:.1f} GB")
+    if not torch.cuda.is_available():
+        print(f"Device        : CPU")
+    else:
+        print(f"GPU           : {torch.cuda.get_device_name(0)}")
+        print(f"GPU 메모리    : {torch.cuda.get_device_properties(0).total_memory / 1024**3:.1f} GB")
     print(f"학습 사이즈   : {SIZES}")
     print(f"Epochs        : {EPOCHS}")
     print(f"Image size    : {IMG_SIZE}")
