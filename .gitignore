@@ -23,5 +23,6 @@ __pycache__/
 /models/
 /.venv/
 /data/
+/runs/
 
 컴공 캡스톤 폴더 구조.txt
