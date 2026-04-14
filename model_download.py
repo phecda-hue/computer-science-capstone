@@ -2,7 +2,7 @@ from huggingface_hub import hf_hub_download
 from pathlib import Path
 
 # 본인 캡스톤 프로젝트 폴더에 맞춰 넣을 것
-SAVE_DIR = Path(r"C:\Users\booge\OneDrive\바탕 화면\과제\4학년 1학기\컴공 캡스톤\models")
+SAVE_DIR = Path(r"C:\Users\SBL-336server2\Desktop\컴공 캡스톤\models")
 SAVE_DIR.mkdir(parents=True, exist_ok=True)
 
 MODELS = ["yolo26n.pt", "yolo26s.pt", "yolo26m.pt", "yolo26l.pt", "yolo26x.pt"]
