@@ -3,8 +3,8 @@
 # YOLO26 전체 사이즈 학습 스크립트 (n/s/m/l/x)
 # CLI 기반 멀티 GPU 분리 실행 버전
 # 실행 예시:
-#   python train.py --gpu 0 --sizes n,m,x
-#   python train.py --gpu 1 --sizes s,l
+#   python train/train.py --gpu 0 --sizes n,m,x
+#   python train/train.py --gpu 1 --sizes s,l
 # ================================================
 
 from pathlib import Path
