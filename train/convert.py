@@ -213,95 +213,59 @@ def convert_yolo(
     quantize: bool = False,
     calib_dir: Path = None,
 ) -> dict:
-    log(f"\n{'=' * 60}")
-    log(f"YOLO 변환 시작: {pt_path.name}")
-    log(f"{'=' * 60}")
+
+    from ultralytics import YOLO
+    import shutil
+
+    outdir.mkdir(parents=True, exist_ok=True)
 
     results = {"pt": str(pt_path)}
 
-    onnx_path = save_path(outdir, "yolo", ".onnx")
+    model = YOLO(str(pt_path))
 
-    try:
-        from ultralytics import YOLO
-
-        model = YOLO(str(pt_path))
-
-        model.export(
-            format="onnx",
-            imgsz=size,
-            simplify=False,
-            opset=17,
-            half=False,
-            dynamic=False,
-        )
-
-        exported = pt_path.with_suffix(".onnx")
-
-        if exported.exists():
-            if onnx_path.exists():
-                onnx_path.unlink()
-            exported.rename(onnx_path)
-
-        if not onnx_path.exists():
-            # ultralytics가 다른 위치에 저장하는 경우 대비
-            possible = list(pt_path.parent.glob("*.onnx"))
-            if possible:
-                possible[0].rename(onnx_path)
-
-        log(f"  YOLO ONNX 저장: {onnx_path}")
-
-    except Exception as e:
-        log(f"  ultralytics export 실패: {e}", "WARN")
-        log("  torch.onnx.export 방식으로 재시도")
-
-        try:
-            from ultralytics import YOLO
-
-            model = YOLO(str(pt_path))
-            dummy = torch.zeros(1, 3, size, size)
-
-            torch.onnx.export(
-                model.model,
-                dummy,
-                str(onnx_path),
-                opset_version=17,
-                input_names=["images"],
-                output_names=["output0"],
-                do_constant_folding=True,
-            )
-
-            log(f"  YOLO ONNX 저장: {onnx_path}")
-
-        except Exception as e2:
-            log(f"  YOLO ONNX 변환 실패: {e2}", "ERR")
-            return results
-
-    if not onnx_path.exists():
-        log("  YOLO ONNX 파일이 생성되지 않았습니다.", "ERR")
-        return results
-
-    results["onnx"] = str(onnx_path)
-
-    onnx_path = simplify_onnx(onnx_path)
-
-    dummy_np = np.random.rand(1, 3, size, size).astype(np.float32)
-    verify_onnx(onnx_path, dummy_np)
-
-    suffix = "_int8" if quantize else "_fp32"
-    tflite_path = save_path(outdir, f"yolo{suffix}", ".tflite")
-
-    ok = onnx_to_tflite(
-        onnx_path=onnx_path,
-        tflite_path=tflite_path,
-        input_shape=(1, 3, size, size),
-        input_name="images",
-        quantize=quantize,
-        calib_images_dir=calib_dir,
+    # ---------------- ONNX ----------------
+    onnx_file = model.export(
+        format="onnx",
+        imgsz=size,
+        simplify=True,
+        opset=17,
     )
 
-    if ok:
-        verify_tflite(tflite_path, dummy_np)
-        results["tflite"] = str(tflite_path)
+    onnx_file = Path(onnx_file)
+
+    final_onnx = outdir / f"{pt_path.stem}.onnx"
+    shutil.copy(onnx_file, final_onnx)
+
+    results["onnx"] = str(final_onnx)
+
+    log(f"ONNX 저장 완료: {final_onnx}")
+
+    # ---------------- TFLite ----------------
+    tflite_exported = model.export(
+        format="tflite",
+        imgsz=size,
+        int8=quantize,
+    )
+
+    tflite_exported = Path(tflite_exported)
+
+    if tflite_exported.is_dir():
+        tflite_candidates = list(tflite_exported.rglob("*.tflite"))
+        if not tflite_candidates:
+            raise FileNotFoundError(f"TFLite 파일을 찾지 못했습니다: {tflite_exported}")
+        tflite_file = tflite_candidates[0]
+    else:
+        tflite_file = tflite_exported
+
+    final_tflite = outdir / f"{pt_path.stem}_{'int8' if quantize else 'fp32'}.tflite"
+    shutil.copy(tflite_file, final_tflite)
+
+    results["tflite"] = str(final_tflite)
+    log(f"TFLite 저장 완료: {final_tflite}")
+
+    results["tflite"] = str(final_tflite)
+
+    log(f"TFLite 저장 완료: {final_tflite}")
 
     return results
 
@@ -429,19 +393,35 @@ def convert_dav2(
 
     dummy = torch.zeros(1, 3, size, size)
 
-    onnx_path = save_path(outdir, "dav2_small", ".onnx")
+    outdir.mkdir(parents=True, exist_ok=True)
+    onnx_path = outdir / "dav2_small.onnx"
 
     try:
         with torch.no_grad():
-            torch.onnx.export(
-                wrapper,
-                dummy,
-                str(onnx_path),
-                opset_version=17,
-                input_names=["image"],
-                output_names=["depth"],
-                do_constant_folding=True,
-            )
+            try:
+                torch.onnx.export(
+                    wrapper,
+                    dummy,
+                    str(onnx_path),
+                    opset_version=16,
+                    input_names=["image"],
+                    output_names=["depth"],
+                    do_constant_folding=True,
+                    dynamic_axes=None,
+                    external_data=False,
+                )
+            except TypeError:
+                # PyTorch 버전에 따라 external_data 인자를 지원하지 않을 수 있음
+                torch.onnx.export(
+                    wrapper,
+                    dummy,
+                    str(onnx_path),
+                    opset_version=16,
+                    input_names=["image"],
+                    output_names=["depth"],
+                    do_constant_folding=True,
+                    dynamic_axes=None,
+                )
 
         log(f"  DAv2 ONNX 저장: {onnx_path}")
         results["onnx"] = str(onnx_path)
@@ -450,32 +430,102 @@ def convert_dav2(
         log(f"  DAv2 ONNX 변환 실패: {e}", "ERR")
         return results
 
-    if not onnx_path.exists():
-        log("  DAv2 ONNX 파일이 생성되지 않았습니다.", "ERR")
-        return results
-
-    onnx_path = simplify_onnx(onnx_path)
-
+    # DAv2는 Resize/Interpolate 때문에 onnxsim에서 오류가 자주 나므로 생략
     dummy_np = np.random.rand(1, 3, size, size).astype(np.float32)
     verify_onnx(onnx_path, dummy_np)
 
+    # TFLite 변환 시도
     suffix = "_int8" if quantize else "_fp32"
-    tflite_path = save_path(outdir, f"dav2_small{suffix}", ".tflite")
-
-    ok = onnx_to_tflite(
+    tflite_path = outdir / f"dav2_small{suffix}.tflite"
+    '''
+    ok = dav2_onnx_to_tflite(
         onnx_path=onnx_path,
         tflite_path=tflite_path,
-        input_shape=(1, 3, size, size),
-        input_name="image",
+        size=size,
         quantize=quantize,
-        calib_images_dir=calib_dir,
     )
-
+    
     if ok:
-        verify_tflite(tflite_path, dummy_np)
         results["tflite"] = str(tflite_path)
-
+    '''
     return results
+
+def dav2_onnx_to_tflite(
+    onnx_path: Path,
+    tflite_path: Path,
+    size: int = 518,
+    quantize: bool = False,
+) -> bool:
+    """
+    DAv2 ONNX → TensorFlow SavedModel → TFLite 변환 시도.
+    .onnx.data 파일이 있는 경우에도 onnx_path와 같은 폴더에 있으면 onnx2tf가 함께 읽을 수 있음.
+    """
+    try:
+        import onnx2tf
+        import tensorflow as tf
+        import shutil
+    except ImportError as e:
+        log(f"  DAv2 TFLite 변환에 필요한 패키지가 없습니다: {e}", "ERR")
+        return False
+
+    onnx_path = onnx_path.resolve()
+    tflite_path = tflite_path.resolve()
+
+    out_dir = tflite_path.parent / "dav2_saved_model"
+
+    # 이전 실패 결과가 파일/폴더로 남아 있으면 삭제
+    if out_dir.exists():
+        if out_dir.is_dir():
+            shutil.rmtree(out_dir)
+        else:
+            out_dir.unlink()
+
+    log("  DAv2 ONNX → TensorFlow SavedModel 변환 시작")
+
+    try:
+        onnx2tf.convert(
+            input_onnx_file_path=str(onnx_path),
+            output_folder_path=str(out_dir),
+            output_signaturedefs=True,
+            non_verbose=False,
+            batch_size=1,
+            overwrite_input_shape=[f"image:1,3,{size},{size}"],
+        )
+    except Exception as e:
+        log(f"  DAv2 ONNX → TF 변환 실패: {e}", "ERR")
+        return False
+
+    tflite_candidates = list(out_dir.rglob("*.tflite"))
+
+    if tflite_candidates:
+        tflite_candidates = sorted(
+            tflite_candidates,
+            key=lambda p: p.stat().st_size,
+            reverse=True,
+        )
+        shutil.copy(tflite_candidates[0], tflite_path)
+        log(f"  DAv2 TFLite 저장 완료: {tflite_path}")
+        return True
+
+    log("  onnx2tf에서 TFLite가 바로 생성되지 않아 TensorFlow Lite Converter로 재시도")
+
+    try:
+        converter = tf.lite.TFLiteConverter.from_saved_model(str(out_dir))
+
+        if quantize:
+            converter.optimizations = [tf.lite.Optimize.DEFAULT]
+
+        tflite_model = converter.convert()
+
+        with open(tflite_path, "wb") as f:
+            f.write(tflite_model)
+
+        log(f"  DAv2 TFLite 저장 완료: {tflite_path}")
+        return True
+
+    except Exception as e:
+        log(f"  TensorFlow SavedModel → TFLite 변환 실패: {e}", "ERR")
+        return False
 
 
 # ══════════════════════════════════════════════════════════════════════════════
