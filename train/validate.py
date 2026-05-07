@@ -214,6 +214,8 @@ class YoloRunner:
         dets = postprocess_yolo(raw, orig_shape, scale, pad)
         pred = raw[0].T
         print(pred[:10])
+        print("MODEL:", self.path)
+        print("OUTPUT DETAILS:", [o["shape"] for o in self._outp])
         return (t1 - t0) * 1000, dets
 
 
