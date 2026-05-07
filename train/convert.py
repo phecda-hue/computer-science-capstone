@@ -270,6 +270,8 @@ def convert_yolo(
 
     log(f"TFLite 저장 완료: {final_tflite}")
 
+    print("TFLite file:", final_tflite)
+
     return results
 
 
