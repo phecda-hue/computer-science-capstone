@@ -2,360 +2,312 @@
   "n": {
     "pt": {
       "latency": {
-        "mean_ms": 11.73,
-        "std_ms": 2.27,
-        "min_ms": 8.23,
-        "max_ms": 15.21,
-        "p50_ms": 12.46,
-        "p95_ms": 14.59,
-        "p99_ms": 15.17,
-        "fps": 85.2
+        "mean_ms": 68.69,
+        "std_ms": 3.97,
+        "min_ms": 55.27,
+        "max_ms": 75.83,
+        "p50_ms": 68.08,
+        "p95_ms": 75.18,
+        "p99_ms": 75.82,
+        "fps": 14.6
       },
       "detection": {
-        "precision": 0.0,
-        "recall": 0.0,
-        "f1": 0.0,
-        "total_pred": 23.0,
-        "total_gt": 193.0
+        "precision": 0.6019,
+        "recall": 0.5775,
+        "f1": 0.572,
+        "total_pred": 81.0,
+        "total_gt": 84.0
       },
-      "num_images": 50
+      "num_images": 30
     },
     "onnx": {
       "latency": {
-        "mean_ms": 14.03,
-        "std_ms": 0.89,
-        "min_ms": 11.9,
-        "max_ms": 15.72,
-        "p50_ms": 14.07,
-        "p95_ms": 15.44,
-        "p99_ms": 15.6,
-        "fps": 71.3
+        "mean_ms": 25.58,
+        "std_ms": 2.42,
+        "min_ms": 22.01,
+        "max_ms": 32.22,
+        "p50_ms": 25.33,
+        "p95_ms": 30.24,
+        "p99_ms": 32.11,
+        "fps": 39.1
       },
       "detection": {
-        "precision": 0.0,
-        "recall": 0.0,
-        "f1": 0.0,
-        "total_pred": 23.0,
-        "total_gt": 193.0
+        "precision": 0.6019,
+        "recall": 0.5775,
+        "f1": 0.572,
+        "total_pred": 81.0,
+        "total_gt": 84.0
       },
-      "num_images": 50
+      "num_images": 30
     },
     "tflite": {
       "latency": {
-        "mean_ms": 75.02,
-        "std_ms": 40.23,
-        "min_ms": 45.61,
-        "max_ms": 147.6,
-        "p50_ms": 49.66,
-        "p95_ms": 143.75,
-        "p99_ms": 146.05,
-        "fps": 13.3
+        "mean_ms": 147.31,
+        "std_ms": 24.4,
+        "min_ms": 106.07,
+        "max_ms": 211.22,
+        "p50_ms": 145.32,
+        "p95_ms": 193.98,
+        "p99_ms": 207.6,
+        "fps": 6.8
       },
       "detection": {
         "precision": 0.0,
         "recall": 0.0,
         "f1": 0.0,
-        "total_pred": 23.0,
-        "total_gt": 193.0
+        "total_pred": 505.0,
+        "total_gt": 84.0
       },
-      "num_images": 50
+      "num_images": 30
     }
   },
   "s": {
     "pt": {
       "latency": {
-        "mean_ms": 19.43,
-        "std_ms": 6.52,
-        "min_ms": 16.57,
-        "max_ms": 52.44,
-        "p50_ms": 17.69,
-        "p95_ms": 20.23,
-        "p99_ms": 51.03,
-        "fps": 51.5
+        "mean_ms": 149.29,
+        "std_ms": 15.57,
+        "min_ms": 132.51,
+        "max_ms": 199.23,
+        "p50_ms": 142.24,
+        "p95_ms": 179.56,
+        "p99_ms": 193.8,
+        "fps": 6.7
       },
       "detection": {
-        "precision": 0.0,
-        "recall": 0.0,
-        "f1": 0.0,
-        "total_pred": 18.0,
-        "total_gt": 193.0
+        "precision": 0.6187,
+        "recall": 0.6295,
+        "f1": 0.5984,
+        "total_pred": 90.0,
+        "total_gt": 84.0
       },
-      "num_images": 50
+      "num_images": 30
     },
     "onnx": {
       "latency": {
-        "mean_ms": 133.59,
-        "std_ms": 90.84,
-        "min_ms": 26.48,
-        "max_ms": 254.98,
-        "p50_ms": 181.24,
-        "p95_ms": 242.28,
-        "p99_ms": 252.46,
-        "fps": 7.5
+        "mean_ms": 59.29,
+        "std_ms": 1.78,
+        "min_ms": 55.59,
+        "max_ms": 64.43,
+        "p50_ms": 59.28,
+        "p95_ms": 62.21,
+        "p99_ms": 63.99,
+        "fps": 16.9
       },
       "detection": {
-        "precision": 0.0,
-        "recall": 0.0,
-        "f1": 0.0,
-        "total_pred": 18.0,
-        "total_gt": 193.0
+        "precision": 0.6187,
+        "recall": 0.6295,
+        "f1": 0.5984,
+        "total_pred": 90.0,
+        "total_gt": 84.0
       },
-      "num_images": 50
+      "num_images": 30
     },
     "tflite": {
       "latency": {
-        "mean_ms": 154.33,
-        "std_ms": 2.39,
-        "min_ms": 151.46,
-        "max_ms": 160.32,
-        "p50_ms": 153.3,
-        "p95_ms": 159.27,
-        "p99_ms": 160.13,
-        "fps": 6.5
-      },
-      "detection": {
-        "precision": 0.0,
-        "recall": 0.0,
-        "f1": 0.0,
-        "total_pred": 18.0,
-        "total_gt": 193.0
-      },
-      "num_images": 50
-    }
-  },
-  "m": {
-    "pt": {
-      "latency": {
-        "mean_ms": 9.82,
-        "std_ms": 0.28,
-        "min_ms": 9.36,
-        "max_ms": 11.13,
-        "p50_ms": 9.78,
-        "p95_ms": 10.15,
-        "p99_ms": 10.83,
-        "fps": 101.9
-      },
-      "detection": {
-        "precision": 0.0,
-        "recall": 0.0,
-        "f1": 0.0,
-        "total_pred": 17.0,
-        "total_gt": 193.0
-      },
-      "num_images": 50
-    },
-    "onnx": {
-      "latency": {
-        "mean_ms": 65.73,
-        "std_ms": 1.45,
-        "min_ms": 63.26,
-        "max_ms": 69.92,
-        "p50_ms": 65.54,
-        "p95_ms": 68.64,
-        "p99_ms": 69.88,
-        "fps": 15.2
-      },
-      "detection": {
-        "precision": 0.0,
-        "recall": 0.0,
-        "f1": 0.0,
-        "total_pred": 16.0,
-        "total_gt": 193.0
-      },
-      "num_images": 50
-    },
-    "tflite": {
-      "latency": {
-        "mean_ms": 528.51,
-        "std_ms": 190.59,
-        "min_ms": 472.04,
-        "max_ms": 1566.1,
-        "p50_ms": 486.14,
-        "p95_ms": 555.26,
-        "p99_ms": 1453.82,
+        "mean_ms": 518.93,
+        "std_ms": 45.46,
+        "min_ms": 437.07,
+        "max_ms": 625.41,
+        "p50_ms": 523.76,
+        "p95_ms": 583.25,
+        "p99_ms": 613.77,
         "fps": 1.9
       },
       "detection": {
         "precision": 0.0,
         "recall": 0.0,
         "f1": 0.0,
-        "total_pred": 17.0,
-        "total_gt": 193.0
+        "total_pred": 466.0,
+        "total_gt": 84.0
       },
-      "num_images": 50
+      "num_images": 30
+    }
+  },
+  "m": {
+    "pt": {
+      "latency": {
+        "mean_ms": 328.17,
+        "std_ms": 25.11,
+        "min_ms": 284.24,
+        "max_ms": 384.25,
+        "p50_ms": 325.91,
+        "p95_ms": 372.41,
+        "p99_ms": 382.68,
+        "fps": 3.0
+      },
+      "detection": {
+        "precision": 0.5999,
+        "recall": 0.6081,
+        "f1": 0.5843,
+        "total_pred": 87.0,
+        "total_gt": 84.0
+      },
+      "num_images": 30
+    },
+    "onnx": {
+      "latency": {
+        "mean_ms": 266.22,
+        "std_ms": 36.05,
+        "min_ms": 230.97,
+        "max_ms": 386.67,
+        "p50_ms": 249.27,
+        "p95_ms": 333.27,
+        "p99_ms": 371.52,
+        "fps": 3.8
+      },
+      "detection": {
+        "precision": 0.5999,
+        "recall": 0.6081,
+        "f1": 0.5843,
+        "total_pred": 87.0,
+        "total_gt": 84.0
+      },
+      "num_images": 30
+    },
+    "tflite": {
+      "latency": {
+        "mean_ms": 1670.49,
+        "std_ms": 104.96,
+        "min_ms": 1471.15,
+        "max_ms": 1862.19,
+        "p50_ms": 1659.77,
+        "p95_ms": 1827.84,
+        "p99_ms": 1853.13,
+        "fps": 0.6
+      },
+      "detection": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "total_pred": 524.0,
+        "total_gt": 84.0
+      },
+      "num_images": 30
     }
   },
   "l": {
     "pt": {
       "latency": {
-        "mean_ms": 14.97,
-        "std_ms": 2.53,
-        "min_ms": 11.25,
-        "max_ms": 20.25,
-        "p50_ms": 14.58,
-        "p95_ms": 19.82,
-        "p99_ms": 20.12,
-        "fps": 66.8
+        "mean_ms": 656.59,
+        "std_ms": 152.53,
+        "min_ms": 428.17,
+        "max_ms": 878.42,
+        "p50_ms": 705.48,
+        "p95_ms": 838.55,
+        "p99_ms": 868.27,
+        "fps": 1.5
       },
       "detection": {
-        "precision": 0.0,
-        "recall": 0.0,
-        "f1": 0.0,
-        "total_pred": 16.0,
-        "total_gt": 193.0
+        "precision": 0.6112,
+        "recall": 0.65,
+        "f1": 0.612,
+        "total_pred": 93.0,
+        "total_gt": 84.0
       },
-      "num_images": 50
+      "num_images": 30
     },
     "onnx": {
       "latency": {
-        "mean_ms": 82.32,
-        "std_ms": 1.61,
-        "min_ms": 79.68,
-        "max_ms": 86.63,
-        "p50_ms": 82.47,
-        "p95_ms": 84.59,
-        "p99_ms": 86.06,
-        "fps": 12.1
+        "mean_ms": 329.22,
+        "std_ms": 10.34,
+        "min_ms": 302.67,
+        "max_ms": 347.32,
+        "p50_ms": 331.07,
+        "p95_ms": 346.26,
+        "p99_ms": 347.14,
+        "fps": 3.0
       },
       "detection": {
-        "precision": 0.0,
-        "recall": 0.0,
-        "f1": 0.0,
-        "total_pred": 16.0,
-        "total_gt": 193.0
+        "precision": 0.6112,
+        "recall": 0.65,
+        "f1": 0.612,
+        "total_pred": 93.0,
+        "total_gt": 84.0
       },
-      "num_images": 50
+      "num_images": 30
     },
     "tflite": {
       "latency": {
-        "mean_ms": 595.93,
-        "std_ms": 6.36,
-        "min_ms": 587.08,
-        "max_ms": 609.36,
-        "p50_ms": 593.99,
-        "p95_ms": 606.78,
-        "p99_ms": 608.34,
-        "fps": 1.7
+        "mean_ms": 2214.5,
+        "std_ms": 133.15,
+        "min_ms": 1951.26,
+        "max_ms": 2490.62,
+        "p50_ms": 2205.41,
+        "p95_ms": 2406.04,
+        "p99_ms": 2469.95,
+        "fps": 0.5
       },
       "detection": {
         "precision": 0.0,
         "recall": 0.0,
         "f1": 0.0,
-        "total_pred": 16.0,
-        "total_gt": 193.0
+        "total_pred": 519.0,
+        "total_gt": 84.0
       },
-      "num_images": 50
+      "num_images": 30
     }
   },
   "x": {
     "pt": {
       "latency": {
-        "mean_ms": 17.49,
-        "std_ms": 0.41,
-        "min_ms": 16.98,
-        "max_ms": 18.96,
-        "p50_ms": 17.35,
-        "p95_ms": 18.5,
-        "p99_ms": 18.86,
-        "fps": 57.2
-      },
-      "detection": {
-        "precision": 0.0,
-        "recall": 0.0,
-        "f1": 0.0,
-        "total_pred": 13.0,
-        "total_gt": 193.0
-      },
-      "num_images": 50
-    },
-    "onnx": {
-      "latency": {
-        "mean_ms": 166.45,
-        "std_ms": 3.16,
-        "min_ms": 161.18,
-        "max_ms": 170.72,
-        "p50_ms": 167.87,
-        "p95_ms": 170.26,
-        "p99_ms": 170.68,
-        "fps": 6.0
-      },
-      "detection": {
-        "precision": 0.0,
-        "recall": 0.0,
-        "f1": 0.0,
-        "total_pred": 13.0,
-        "total_gt": 193.0
-      },
-      "num_images": 50
-    },
-    "tflite": {
-      "latency": {
-        "mean_ms": 1437.32,
-        "std_ms": 466.98,
-        "min_ms": 1311.13,
-        "max_ms": 3842.55,
-        "p50_ms": 1344.61,
-        "p95_ms": 1396.8,
-        "p99_ms": 3722.53,
+        "mean_ms": 1437.04,
+        "std_ms": 119.17,
+        "min_ms": 1214.97,
+        "max_ms": 1683.21,
+        "p50_ms": 1424.74,
+        "p95_ms": 1658.76,
+        "p99_ms": 1681.51,
         "fps": 0.7
       },
       "detection": {
+        "precision": 0.6506,
+        "recall": 0.6595,
+        "f1": 0.6289,
+        "total_pred": 87.0,
+        "total_gt": 84.0
+      },
+      "num_images": 30
+    },
+    "onnx": {
+      "latency": {
+        "mean_ms": 713.97,
+        "std_ms": 53.24,
+        "min_ms": 598.3,
+        "max_ms": 857.08,
+        "p50_ms": 714.56,
+        "p95_ms": 802.92,
+        "p99_ms": 841.71,
+        "fps": 1.4
+      },
+      "detection": {
+        "precision": 0.6506,
+        "recall": 0.6595,
+        "f1": 0.6289,
+        "total_pred": 87.0,
+        "total_gt": 84.0
+      },
+      "num_images": 30
+    },
+    "tflite": {
+      "latency": {
+        "mean_ms": 5600.71,
+        "std_ms": 611.28,
+        "min_ms": 5008.28,
+        "max_ms": 7468.11,
+        "p50_ms": 5356.75,
+        "p95_ms": 7028.48,
+        "p99_ms": 7384.9,
+        "fps": 0.2
+      },
+      "detection": {
         "precision": 0.0,
         "recall": 0.0,
         "f1": 0.0,
-        "total_pred": 13.0,
-        "total_gt": 193.0
+        "total_pred": 413.0,
+        "total_gt": 84.0
       },
-      "num_images": 50
+      "num_images": 30
     }
   },
-  "dav2": {
-    "pt": {
-      "latency": {
-        "mean_ms": 1423.98,
-        "std_ms": 721.53,
-        "min_ms": 874.25,
-        "max_ms": 2609.63,
-        "p50_ms": 942.75,
-        "p95_ms": 2578.08,
-        "p99_ms": 2603.91,
-        "fps": 0.7
-      },
-      "num_images": 50
-    },
-    "onnx": {
-      "latency": {
-        "mean_ms": 206.75,
-        "std_ms": 156.55,
-        "min_ms": 114.79,
-        "max_ms": 534.16,
-        "p50_ms": 124.19,
-        "p95_ms": 518.37,
-        "p99_ms": 532.64,
-        "fps": 4.8
-      },
-      "num_images": 50,
-      "consistency_vs_reference": {
-        "spearman_corr": 1.0,
-        "norm_mean_diff": 0.0
-      }
-    },
-    "tflite": {
-      "latency": {
-        "mean_ms": 1154.2,
-        "std_ms": 559.32,
-        "min_ms": 798.7,
-        "max_ms": 2393.94,
-        "p50_ms": 855.02,
-        "p95_ms": 2294.64,
-        "p99_ms": 2359.55,
-        "fps": 0.9
-      },
-      "num_images": 50,
-      "consistency_vs_reference": {
-        "spearman_corr": 1.0,
-        "norm_mean_diff": 0.0
-      }
-    }
-  }
+  "dav2": {}
 }

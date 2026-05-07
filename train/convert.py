@@ -14,6 +14,7 @@ YOLO + DAv2 모델을 ONNX / TFLite로 동시에 변환
 """
 
 import argparse
+from pyexpat import model
 import sys
 from pathlib import Path
 
@@ -229,6 +230,7 @@ def convert_yolo(
         imgsz=size,
         simplify=True,
         opset=17,
+        nms=False,
     )
 
     onnx_file = Path(onnx_file)
@@ -245,6 +247,7 @@ def convert_yolo(
         format="tflite",
         imgsz=size,
         int8=quantize,
+        nms=False,
     )
 
     tflite_exported = Path(tflite_exported)
@@ -372,7 +375,7 @@ def load_dav2_model(pt_path: Path):
 def convert_dav2(
     pt_path: Path,
     outdir: Path,
-    size: int = 518,
+    size: int = 640,
     quantize: bool = False,
     calib_dir: Path = None,
 ) -> dict:
@@ -453,7 +456,7 @@ def convert_dav2(
 def dav2_onnx_to_tflite(
     onnx_path: Path,
     tflite_path: Path,
-    size: int = 518,
+    size: int = 640,
     quantize: bool = False,
 ) -> bool:
     """

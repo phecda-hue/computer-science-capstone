@@ -74,18 +74,43 @@ def find_converted(converted_dir: Path, size: str, fmt: str) -> Path | None:
         return None
 
     if fmt == "onnx":
-        # sim 버전 우선
-        for name in ["yolo_sim.onnx", "yolo.onnx"]:
+        candidates = [
+            "best.onnx",
+            f"best_{size}.onnx",
+            "yolo.onnx",
+            "yolo_sim.onnx",
+        ]
+
+        for name in candidates:
             p = folder / name
             if p.exists():
                 return p
 
+        # 그래도 없으면 폴더 안의 onnx 아무거나 탐색
+        files = sorted(folder.glob("*.onnx"))
+        if files:
+            return files[0]
+
     elif fmt == "tflite":
-        # int8 → fp32 순서로 탐색
-        for name in ["yolo_int8.tflite", "yolo_fp32.tflite"]:
+        candidates = [
+            "best_fp32.tflite",
+            "best_int8.tflite",
+            f"best_{size}_fp32.tflite",
+            f"best_{size}_int8.tflite",
+            "yolo_fp32.tflite",
+            "yolo_int8.tflite",
+        ]
+
+        for name in candidates:
             p = folder / name
             if p.exists():
                 return p
+
+        # 그래도 없으면 폴더 안의 tflite 아무거나 탐색
+        files = sorted(folder.glob("*.tflite"))
+        if files:
+            return files[0]
+
     return None
 
 
@@ -209,6 +234,26 @@ def main():
     t_start = time.time()
 
     images = collect_test_images(args.test_dir)
+
+    if args.gt_labels:
+        label_files = list(args.gt_labels.glob("*.txt"))
+        log(f"GT 라벨 폴더: {args.gt_labels}")
+        log(f"GT 라벨 파일 수: {len(label_files)}")
+
+        if len(label_files) == 0:
+            log("GT 라벨 txt 파일이 없습니다. --gt-labels 경로를 확인하세요.", "ERR")
+
+        missing = []
+        for img in images[:10]:
+            label_path = args.gt_labels / f"{img.stem}.txt"
+            if not label_path.exists():
+                missing.append(img.name)
+
+        if missing:
+            log(f"앞 10개 이미지 중 라벨이 없는 이미지: {missing}", "WARN")
+    else:
+        log("--gt-labels가 지정되지 않았습니다. F1 계산이 0으로 나올 수 있습니다.", "WARN")
+
     log(f"테스트 이미지 {len(images)}장 (최대 {args.runs}장 사용)")
 
     all_results = {}

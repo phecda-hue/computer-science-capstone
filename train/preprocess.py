@@ -84,7 +84,6 @@ def collect_test_images(test_dir: str | Path, exts=(".jpg", ".jpeg", ".png")) ->
         raise FileNotFoundError(f"테스트 이미지를 찾을 수 없습니다: {test_dir}")
     return images
 
-
 # ── YOLO 출력 후처리 (NMS 포함) ───────────────────────────────────────────────
 def postprocess_yolo(
     output: np.ndarray,

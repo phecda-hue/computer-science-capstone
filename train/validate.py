@@ -149,31 +149,72 @@ class YoloRunner:
             return (t1 - t0) * 1000, dets
 
         elif self.fmt == "tflite":
-            expected = tuple(self._inp["shape"])  # 모델 기대 shape
-
+            expected = tuple(self._inp["shape"])
             feed = blob.copy()
 
-            # NHWC 자동 감지: (1,3,640,640) → (1,640,640,3)
-            if len(expected) == 4 and expected[3] == blob.shape[1]:
+            # NCHW -> NHWC
+            if len(expected) == 4 and expected[-1] == 3:
                 feed = feed.transpose(0, 2, 3, 1)
 
-            if self._inp["dtype"] == np.int8:
+            # 입력 양자화 처리
+            if self._inp["dtype"] in [np.int8, np.uint8]:
                 sc, zp = self._inp["quantization"]
-                feed = (feed / sc + zp).astype(np.int8)
+                feed = (feed / sc + zp).astype(self._inp["dtype"])
             else:
                 feed = feed.astype(self._inp["dtype"])
 
             self._interp.set_tensor(self._inp["index"], feed)
             self._interp.invoke()
-            raw = self._interp.get_tensor(self._outp[0]["index"])
 
-            if self._outp[0]["dtype"] == np.int8:
-                sc, zp = self._outp[0]["quantization"]
+        raw = self._interp.get_tensor(self._outp[0]["index"])
+
+        if self._outp[0]["dtype"] in [np.int8, np.uint8]:
+            sc, zp = self._outp[0]["quantization"]
+            if sc != 0:
                 raw = (raw.astype(np.float32) - zp) * sc
 
-            t1   = time.perf_counter()
-            dets = postprocess_yolo(raw, orig_shape, scale, pad)
+        t1 = time.perf_counter()
+
+        # TFLite YOLO26 end2end output: (1, 6, 300)
+        if raw.ndim == 3 and raw.shape[1] == 6:
+            # raw: (1, 6, 300) → (300, 6)
+            pred = raw[0].T
+
+            dets = []
+            h, w = orig_shape
+
+            for p in pred:
+                x1, y1, x2, y2, cls, score = p.tolist()
+
+                if score < 0.25:
+                    continue
+
+                # class id 보정
+                cls = int(round(cls))
+
+                # bbox가 0~1 정규화 좌표인 경우
+                if max(x1, y1, x2, y2) <= 1.5:
+                    x1 *= w
+                    x2 *= w
+                    y1 *= h
+                    y2 *= h
+
+                dets.append({
+                    "box": [x1, y1, x2, y2],
+                    "score": float(score),
+                    "class": cls,
+                })
+
             return (t1 - t0) * 1000, dets
+
+        # 일반 YOLO output인 경우만 postprocess 사용
+        if raw.ndim == 3 and raw.shape[1] > raw.shape[2]:
+            raw = raw.transpose(0, 2, 1)
+
+        dets = postprocess_yolo(raw, orig_shape, scale, pad)
+        pred = raw[0].T
+        print(pred[:10])
+        return (t1 - t0) * 1000, dets
 
 
 # ══════════════════════════════════════════════════════════════════════════════
